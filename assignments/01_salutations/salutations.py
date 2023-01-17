@@ -36,7 +36,9 @@ def get_args():
     )
 
     parser.add_argument(
-        "-e", "--excited", help="Include an exclamation point", action="store_true"
+        "-e", "--excited",
+        help="Include an exclamation point",
+        action="store_true"
     )
 
     return parser.parse_args()
@@ -44,14 +46,14 @@ def get_args():
 
 # --------------------------------------------------
 def main():
-    """Greeting assignment #1"""
+    """01_salutations"""
 
     args = get_args()
     str_greeting = args.greeting
     str_name = args.name
     flag_excited = args.excited
 
-    if flag_excited == False:
+    if flag_excited is False:
         print(f"{str_greeting}, {str_name}.")
     else:
         print(f"{str_greeting}, {str_name}!")
