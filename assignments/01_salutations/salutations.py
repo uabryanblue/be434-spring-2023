@@ -51,9 +51,10 @@ def main():
     str_name = args.name
     flag_excited = args.excited
 
-    print(f'str_greeting = "{str_greeting}"')
-    print(f'str_name = "{str_name}"')
-    print(f'str_excited = "{flag_excited}"')
+    if flag_excited == False:
+        print(f"{str_greeting}, {str_name}.")
+    else:
+        print(f"{str_greeting}, {str_name}!")
 
 
 # --------------------------------------------------
