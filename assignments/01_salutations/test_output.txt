@@ -1,0 +1,95 @@
+I ran this command:
+$ pytest -v --disable-warnings test.py
+This is the output. All failing for some reason.
+
+pylint from command line gives a 10/10, but if you add that option, it fails that part as well.
+
+
+============================= test session starts =============================
+platform win32 -- Python 3.11.1, pytest-7.2.1, pluggy-1.0.0 -- C:\Users\Lazuline\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\Lazuline\Documents\GitHub\be434-spring-2023\assignments\01_salutations
+plugins: flake8-1.1.1, mypy-0.10.3, pylint-0.19.0
+collecting ... collected 7 items
+
+test.py::test_exists PASSED                                              [ 14%]
+test.py::test_usage FAILED                                               [ 28%]
+test.py::test_defaults FAILED                                            [ 42%]
+test.py::test_greeting FAILED                                            [ 57%]
+test.py::test_name FAILED                                                [ 71%]
+test.py::test_excited FAILED                                             [ 85%]
+test.py::test_all_options FAILED                                         [100%]
+
+================================== FAILURES ===================================
+_________________________________ test_usage __________________________________
+
+    def test_usage():
+        """ Prints usage """
+    
+        for flag in ['-h', '--help']:
+            rv, out = getstatusoutput(f'{PRG} {flag}')
+>           assert rv == 0
+E           assert 1 == 0
+
+test.py:22: AssertionError
+________________________________ test_defaults ________________________________
+
+    def test_defaults():
+        """ Prints expected default values """
+    
+        rv, out = getstatusoutput(f'{PRG}')
+>       assert rv == 0
+E       assert 1 == 0
+
+test.py:31: AssertionError
+________________________________ test_greeting ________________________________
+
+    def test_greeting():
+        """ Accepts greeting """
+    
+        for opt in ['-g', '--greeting']:
+            rv, out = getstatusoutput(f'{PRG} {opt} Hola')
+>           assert rv == 0
+E           assert 1 == 0
+
+test.py:41: AssertionError
+__________________________________ test_name __________________________________
+
+    def test_name():
+        """ Accepts name """
+    
+        for opt in ['-n', '--name']:
+            rv, out = getstatusoutput(f'{PRG} {opt} Jorge')
+>           assert rv == 0
+E           assert 1 == 0
+
+test.py:51: AssertionError
+________________________________ test_excited _________________________________
+
+    def test_excited():
+        """ Prints bang """
+    
+        for flag in ['-e', '--excited']:
+            rv, out = getstatusoutput(f'{PRG} {flag}')
+>           assert rv == 0
+E           assert 1 == 0
+
+test.py:61: AssertionError
+______________________________ test_all_options _______________________________
+
+    def test_all_options():
+        """ Handles all options """
+    
+        rv, out = getstatusoutput(f'{PRG} -e -g Greetings -n Sarah')
+>       assert rv == 0
+E       assert 1 == 0
+
+test.py:70: AssertionError
+=========================== short test summary info ===========================
+FAILED test.py::test_usage - assert 1 == 0
+FAILED test.py::test_defaults - assert 1 == 0
+FAILED test.py::test_greeting - assert 1 == 0
+FAILED test.py::test_name - assert 1 == 0
+FAILED test.py::test_excited - assert 1 == 0
+FAILED test.py::test_all_options - assert 1 == 0
+========================= 6 failed, 1 passed in 0.25s =========================

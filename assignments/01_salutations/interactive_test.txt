@@ -1,0 +1,9 @@
+Here are a few samples of output when I run the code from the command line. They appear to be fine based on the README.md file.
+$ ./salutations.py -n Amanda
+Howdy, Amanda.
+
+$ ./salutations.py -e
+Howdy, Stranger!
+
+$ ./salutations.py --greeting Sup --name Dude --excited
+Sup, Dude!
