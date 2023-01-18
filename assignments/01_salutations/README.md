@@ -172,7 +172,9 @@ $ python3 -m pip install pytest flake8 pylint
 You can run the test suite with the following command:
 
 ```
-$ pytest -xv --pylint --disable-warnings test.py
+$ pytest -xv test.py salutations.py
+$ flake8 salutations.py
+$ pylint salutations.py
 ```
 
 You can also use the Makefile shortcut:

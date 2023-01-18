@@ -1,2 +1,4 @@
 test:
-	pytest -xv --pylint --disable-warnings test.py iupac.py
+	pytest -xv test.py iupac.py
+	flake8 iupac.py
+	pylint iupac.py

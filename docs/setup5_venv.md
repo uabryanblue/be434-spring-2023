@@ -104,8 +104,7 @@ pylint --generate-rcfile > ~/.pylintrc
 Then edit that file to add the following line after "MAIN". Note that this should be one continuous line, but I've broken it here for display:
 
 ```
-disable=too-many-locals,invalid-name,too-many-statements,too-many-arguments,\
-cell-var-from-loop,wrong-import-order
+disable=too-many-locals,invalid-name,too-many-statements,too-many-arguments,cell-var-from-loop,wrong-import-order
 ``` 
 
 ```

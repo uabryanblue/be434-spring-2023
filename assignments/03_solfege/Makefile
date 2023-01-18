@@ -1,4 +1,6 @@
 .PHONY: test
 
 test:
-	pytest -xv --pylint --disable-warnings test.py solfege.py
+	pytest -xv test.py solfege.py
+	flake8 solfege.py
+	pylint solfege.py

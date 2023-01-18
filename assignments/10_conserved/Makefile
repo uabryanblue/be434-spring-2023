@@ -1,2 +1,4 @@
 test:
-	pytest -xv --pylint --disable-warnings test.py conserved.py
+	pytest -xv test.py conserved.py
+	flake8 conserved.py
+	pylint conserved.py

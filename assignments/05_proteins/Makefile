@@ -1,2 +1,4 @@
 test:
-	pytest -xv --pylint --disable-warnings test.py translate.py
+	pytest -xv test.py translate.py
+	flake8 translate.py
+	pylint translate.py

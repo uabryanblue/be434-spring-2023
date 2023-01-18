@@ -1,2 +1,4 @@
 test:
-	pytest -xv --pylint --disable-warnings test.py grep.py
+	pytest -xv test.py grep.py
+	flake8 grep.py
+	pylint grep.py

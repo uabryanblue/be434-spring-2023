@@ -1,4 +1,6 @@
 .PHONY: test
 
 test:
-	pytest -xv --pylint --disable-warnings test.py cat.py
+	pytest -xv test.py cat.py
+	flake8 cat.py
+	pylint cat.py

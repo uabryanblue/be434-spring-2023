@@ -1,2 +1,4 @@
 test:
-	pytest -xv --pylint --disable-warnings test.py tac.py
+	pytest -xv test.py tac.py
+	flake8 tac.py
+	pylint tac.py

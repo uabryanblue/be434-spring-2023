@@ -1,2 +1,4 @@
 test:
-	pytest -xv --pylint --disable-warnings test.py kmers.py
+	pytest -xv test.py kmers.py
+	flake8 kmers.py
+	pylint kmers.py

@@ -1,4 +1,6 @@
 .PHONY: test
 
 test:
-	pytest -xv --pylint --disable-warnings test.py
+	pytest -xv test.py sum.py
+	flake8 sum.py
+	pylint sum.py
