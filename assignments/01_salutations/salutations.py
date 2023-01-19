@@ -4,6 +4,7 @@
 Author : Bryan Blue bryanblue@arizona.edu
 Date   : 2023-01-17
 Purpose: Print greeting
+University of Arizona, BE534
 """
 
 import argparse
@@ -18,6 +19,7 @@ def get_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
 
+    # allow user to specify an alternate greeting
     parser.add_argument(
         "-g",
         "--greeting",
@@ -27,6 +29,7 @@ def get_args():
         default="Howdy",
     )
 
+    # allow user to specify an alternate name to greet
     parser.add_argument(
         "-n",
         "--name",
@@ -36,6 +39,8 @@ def get_args():
         default="Stranger",
     )
 
+    # control punctuation of a default of a period (.)
+    # or override to produce an exclamation point (!)
     parser.add_argument(
         "-e", "--excited",
         help="Include an exclamation point",
