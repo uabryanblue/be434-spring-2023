@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+
 """
 Author : Bryan Blue bryanblue@arizona.edu
 Date   : 2023-01-17
