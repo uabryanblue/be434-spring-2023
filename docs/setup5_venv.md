@@ -41,8 +41,8 @@ source .venv/bin/activate
 
 For a PC, you will need to enter the following commands:
 ```
-.venv\scripts\activate
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+.venv\scripts\activate
 ```
 
 Now you can install the python modules we need into your virtual environment:
