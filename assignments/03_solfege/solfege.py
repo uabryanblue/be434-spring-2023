@@ -32,16 +32,26 @@ def main():
 
     # configure solfege dictionary
     syllables = dict(
-        Do="A deer, a female deer",
-        Re="A drop of golden sun",
-        Mi="A name I call myself",
-        Fa="A long long way to run",
-        Sol="A needle pulling thread",
-        La="A note to follow sol",
-        Ti="A drink with jam and bread",
+        {
+            "Do": "A deer, a female deer",
+            "Re": "A drop of golden sun",
+            "Mi": "A name I call myself",
+            "Fa": "A long long way to run",
+            "Sol": "A needle pulling thread",
+            "La": "A note to follow sol",
+            "Ti": "A drink with jam and bread",
+        }
     )
 
-    print(f'syllables = "{syllables}"')
+    # print(f'syllables = "{syllables}"')
+    # process each string passed to program
+    for syll in str_arg:
+        # if we have a match, output appropriate song phrase
+        if syll in syllables:
+            print(f"{syll}, {syllables[syll]}")
+        # if not found, generate an error message
+        else:
+            print(f'I don\'t know "{syll}"')
 
 
 # --------------------------------------------------
