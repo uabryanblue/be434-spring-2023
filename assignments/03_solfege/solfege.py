@@ -47,6 +47,7 @@ def main():
     # process each string passed to program
     for syll in str_arg:
         # if we have a match, output appropriate song phrase
+        # this could also be implemented with "syllables.has_key(syll)"
         if syll in syllables:
             print(f"{syll}, {syllables[syll]}")
         # if not found, generate an error message
