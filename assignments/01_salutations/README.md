@@ -2,21 +2,6 @@
 
 Create Python program called `saluations.py` that will print a friendly greeting.
 
-## Be sure you are in your virtual environment
-
-Open the be434-spring-2023 directory in VS Code (in your GitHub repository). When you do this, it should automatically start your virtual environment. If not, open a terminal to activate the virtual environment:
-
-For a Mac, you will need to enter the following commands in the terminal:
-```
-source .venv/bin/activate
-```
-
-For a PC, you will need to enter the following commands:
-```
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
-.venv\scripts\activate
-```
-
 ## Installing new.py Into Your PATH
 
 I hate writing code from scratch! This week you learned about using a program called `new.py` that will create a program for you to start from. Now, we need to add this program to our PATH, so we can just use it without having to figure out where it is!

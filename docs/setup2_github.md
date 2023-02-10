@@ -65,7 +65,11 @@ brew install git
 
 ![4git](./images/1_win_git_editor.png "Tell Git you would like to use VS code as your editor.")
 
-![4git](./images/1_win_git_editor.png "Tell Git you want Check-out as is, commit Unix-style line endings.")
+![5git](./images/2_win_line_conv.png "Tell Git you want Check-out as is, commit Unix-style line endings.")
+
+
+## Install GitHub Desktop
+One option for using Git, is to download the Desktop version of the program [here](https://desktop.github.com/). Once you have Downloaded it, login to GitHub with Github Desktop and clone the BE434-spring-2023 repository to your laptop.
 
 
 ## Authors

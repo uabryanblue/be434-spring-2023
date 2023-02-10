@@ -58,6 +58,13 @@ python3 --version
 pip3 --version
 ```
 
+If pip3 is giving you an error, you may need to install it separately. Here are a few commands to do that:
+
+```
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
+```
+
 You will also need to update your $PATH to tell your computer where to find Python.
 
 ```
