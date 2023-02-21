@@ -47,9 +47,9 @@ def main():
     
 
     args = get_args()
-    print('seq =', args.sequence)
-    print('codons =', args.codons)
-    print('outfile =', args.outfile)
+    # print('seq =', args.sequence)
+    # print('codons =', args.codons)
+    # print('outfile =', args.outfile)
 
     # read in codons table and create a dictionary
     codon_table = {}
@@ -59,11 +59,14 @@ def main():
     # uncomment to output the codon dictionary
     # pprint(codon_table) # pretty print
     
+    # convert codons into 
     k = 3
     seq = args.sequence
     for codon in [seq[i:i + k].upper() for i in range(0, len(seq), k)]:
-        print(f"{codon} {codon_table.get(codon)}")
-    
+        # print(f"{codon} {codon_table.get(codon)}") # debug output
+        args.outfile.write(f"{codon_table.get(codon)}")
+    args.outfile.write("\n")
+    print(f'Output written to \"{args.outfile.name}\".')
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
