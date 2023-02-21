@@ -6,45 +6,45 @@ Purpose: exercise 5 - translate.py
 """
 
 import argparse
-import sys
-from pprint import pprint
+
+# from pprint import pprint # only used in debugging dictionary
+
 
 # --------------------------------------------------
 def get_args():
     """Get command-line arguments"""
 
     parser = argparse.ArgumentParser(
-        description='Translate DNA/RNA to proteins',
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        description="Translate DNA/RNA to proteins",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
 
+    parser.add_argument(
+        "-c",
+        "--codons",
+        required=True,
+        help="A file with codon translations",
+        metavar="FILE",
+        type=argparse.FileType("rt"),
+    )
 
-    parser.add_argument('-c',
-                        '--codons',
-                        required=True,
-                        help='A file with codon translations',
-                        metavar='FILE',
-                        type=argparse.FileType('rt'))
-                        #default=sys.stdin)
+    parser.add_argument(
+        "-o",
+        "--outfile",
+        help="Output filename",
+        metavar="FILE",
+        default="out.txt",
+        type=argparse.FileType("wt"),
+    )
 
-    parser.add_argument('-o',
-                        '--outfile',
-                        help='Output filename',
-                        metavar='FILE',
-                        default='out.txt',
-                        type=argparse.FileType('wt'))
-
-    parser.add_argument("sequence",
-                        metavar="str",
-                        help="DNA/RNA sequence")
-
+    parser.add_argument("sequence", metavar="str", help="DNA/RNA sequence")
 
     return parser.parse_args()
 
 
 # --------------------------------------------------
 def main():
-    """Make a jazz noise here"""
-    
+    """exercise 5 - translate.py"""
 
     args = get_args()
     # print('seq =', args.sequence)
@@ -55,18 +55,23 @@ def main():
     codon_table = {}
     for line in args.codons:
         codon_table[line.rstrip().split()[0]] = line.rstrip().split()[1]
-        #print(line.rstrip().split())
     # uncomment to output the codon dictionary
+    # uncomment the pretty print include for this to work
     # pprint(codon_table) # pretty print
-    
-    # convert codons into 
+
+    # convert codons into amino acids
     k = 3
     seq = args.sequence
-    for codon in [seq[i:i + k].upper() for i in range(0, len(seq), k)]:
+    for codon in [seq[i: i + k].upper() for i in range(0, len(seq), k)]:
         # print(f"{codon} {codon_table.get(codon)}") # debug output
-        args.outfile.write(f"{codon_table.get(codon)}")
+        if codon_table.get(codon) is None:
+            args.outfile.write("-")
+        else:
+            args.outfile.write(f"{codon_table.get(codon)}")
     args.outfile.write("\n")
-    print(f'Output written to \"{args.outfile.name}\".')
+    print(f'Output written to "{args.outfile.name}".')
+
+
 # --------------------------------------------------
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
