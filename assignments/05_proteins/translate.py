@@ -56,9 +56,14 @@ def main():
     for line in args.codons:
         codon_table[line.rstrip().split()[0]] = line.rstrip().split()[1]
         #print(line.rstrip().split())
-        
-
-    pprint(codon_table) # pretty print
+    # uncomment to output the codon dictionary
+    # pprint(codon_table) # pretty print
+    
+    k = 3
+    seq = args.sequence
+    for codon in [seq[i:i + k].upper() for i in range(0, len(seq), k)]:
+        print(f"{codon} {codon_table.get(codon)}")
+    
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
