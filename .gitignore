@@ -131,3 +131,4 @@ dmypy.json
 
 *.swp
 .bashrc
+assignments/05_proteins/foo.txt
