@@ -26,13 +26,13 @@ def get_args():
                         #default=sys.stdin)
 
     parser.add_argument('-o',
-                        '--output',
-                        help='A readable file',
+                        '--outfile',
+                        help='Output filename',
                         metavar='FILE',
+                        default='out.txt',
                         type=argparse.FileType('wt'))
-                        # default='out.txt')
 
-    parser.add_argument("str",
+    parser.add_argument("sequence",
                         metavar="str",
                         help="DNA/RNA sequence")
 
@@ -45,6 +45,9 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
+    print('seq =', args.sequence)
+    print('codons =', args.codons)
+    print('outfile =', args.outfile)
 
 
 
