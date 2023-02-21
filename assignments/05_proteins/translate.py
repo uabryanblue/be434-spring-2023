@@ -7,6 +7,7 @@ Purpose: exercise 5 - translate.py
 
 import argparse
 import sys
+from pprint import pprint
 
 # --------------------------------------------------
 def get_args():
@@ -43,14 +44,21 @@ def get_args():
 # --------------------------------------------------
 def main():
     """Make a jazz noise here"""
+    
 
     args = get_args()
     print('seq =', args.sequence)
     print('codons =', args.codons)
     print('outfile =', args.outfile)
 
+    # read in codons table and create a dictionary
+    codon_table = {}
+    for line in args.codons:
+        codon_table[line.rstrip().split()[0]] = line.rstrip().split()[1]
+        #print(line.rstrip().split())
+        
 
-
+    pprint(codon_table) # pretty print
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
