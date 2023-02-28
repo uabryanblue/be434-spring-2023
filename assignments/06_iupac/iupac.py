@@ -42,9 +42,22 @@ def main():
     SEQ = args.SEQ
     FILE = args.output
 
-    print(f'str_arg = "{SEQ}"')
-    print('file_arg = "{}"'.format(FILE if FILE else ''))
+    # print(f'str_arg = "{SEQ}"')
+    # print('file_arg = "{}"'.format(FILE if FILE else ''))
 
+    # Basic list comp for a single regex, expand to dictionary
+    #[print('OK') if re.search('^A[CT]G$', 'ATG') else print('NO')]
+    code = '[M]' # for AC
+    out_txt = '[AC]'
+#    re_txt = '^A[' + base + ']G$'
+#    re_txt = base
+    # re_txt = '^A[CT]G$'
+    text = map(
+        lambda base: re.sub(code, out_txt, base), SEQ)
+
+    #text = re.sub(code, vowel, text)
+
+    print(''.join(text))
 
 # --------------------------------------------------
 if __name__ == '__main__':
