@@ -49,15 +49,15 @@ def main():
     #[print('OK') if re.search('^A[CT]G$', 'ATG') else print('NO')]
     code = '[M]' # for AC
     out_txt = '[AC]'
-#    re_txt = '^A[' + base + ']G$'
-#    re_txt = base
-    # re_txt = '^A[CT]G$'
-    text = map(
-        lambda base: re.sub(code, out_txt, base), SEQ)
+
+    for c in SEQ:
+        print(f'search:{code} replace:{out_txt} in:{c}' )
+        text = re.sub(code, out_txt, c)
 
     #text = re.sub(code, vowel, text)
+    print(f'{text}')
 
-    print(''.join(text))
+    #print(''.join(text))
 
 # --------------------------------------------------
 if __name__ == '__main__':
