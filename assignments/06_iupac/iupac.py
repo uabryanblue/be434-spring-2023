@@ -6,8 +6,8 @@ Purpose: Homework 06
 """
 
 import argparse
-import re
 import sys
+
 
 # --------------------------------------------------
 def get_args():
@@ -23,13 +23,10 @@ def get_args():
                         help='Input sequence(s)')
 
     parser.add_argument('-o',
-                        '--output',
+                        '--outfile',
                         help='Output filename',
                         metavar='FILE',
-                        default=sys.stdout,
-                        type=argparse.FileType("wt"),
-                        )
-
+                        type=str)
 
     return parser.parse_args()
 
@@ -40,10 +37,12 @@ def main():
 
     args = get_args()
     SEQ = args.SEQ
-    FILE = args.output
+    fh = open(args.outfile, 'wt') if args.outfile else sys.stdout
+    filename = fh.name
+    # print(f'FILE: {fh.name}')
 
     # create dictionary of IUPAC -> Base code translations
-    codes ={} 
+    codes = {}
     codes['A'] = 'A'
     codes['C'] = 'C'
     codes['G'] = 'G'
@@ -59,17 +58,23 @@ def main():
     codes['D'] = '[AGT]'
     codes['H'] = '[ACT]'
     codes['V'] = '[ACG]'
-    codes['N'] = '[ACGT]' 
+    codes['N'] = '[ACGT]'
 
-    # print(f'str_arg = "{SEQ}"')
-    # print('file_arg = "{}"'.format(FILE if FILE else ''))
-   
+    # may have more than one DNA sequence passed in
     for dna in SEQ:
         text = dna + ' '
+        # look at each character in the DNA string
+        # for possible replacement using the codes dictionary
         for dna_char in dna:
-            text += codes.get(dna_char,dna_char) #, out_txt, c)        
-        FILE.write(text)       
-        FILE.write('\n')
+            text += codes.get(dna_char, dna_char)
+        fh.write(text)
+        fh.write('\n')
+
+    # output a filename message if the output is not stdout
+    if filename != '<stdout>':
+        print(f'Done, see output in "{filename}"')
+
+    fh.close()
 
 
 # --------------------------------------------------
