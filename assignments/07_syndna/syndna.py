@@ -86,10 +86,6 @@ def main():
 
     fh = args.outfile
 
-    # print(f'{fh.name}')
-    # print(f'{args.pctgc}')
-    # print(f'{numseqs}')
-
     def create_pool(pctgc, max_len, seq_type):
         """ Create the pool of bases """
 
@@ -112,7 +108,10 @@ def main():
         # print(f"mysequence: {mysequence}")
         fh.write(f">{i+1}\n")
         fh.write(f"{''.join(mysequence)}\n")
-    print(f'Done, wrote {args.numseqs} {args.seqtype.upper()} sequences to "{fh.name}".')
+
+    outstr = 'Done, wrote ' + str(args.numseqs) + ' ' +\
+        args.seqtype.upper() + ' sequences to "' + fh.name + '".'
+    print(outstr)
 
     # cleanup
     fh.close()
