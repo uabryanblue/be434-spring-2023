@@ -60,15 +60,30 @@ def main():
     codes['V'] = '[ACG]'
     codes['N'] = '[ACGT]'
 
+# use for loops as a solution
+    # # may have more than one DNA sequence passed in
+    # for dna in SEQ:
+    #     text = dna + ' '
+    #     # look at each character in the DNA string
+    #     # for possible replacement using the codes dictionary
+    #      # default to itself if no lookup found
+    #     for dna_char in dna:
+    #         text += codes.get(dna_char, dna_char)
+    #     fh.write(text)
+    #     fh.write('\n')
+
+# use list comprehension for inner loop as a solution
     # may have more than one DNA sequence passed in
     for dna in SEQ:
-        text = dna + ' '
+        text = [dna]
+        text.append(' ')
         # look at each character in the DNA string
         # for possible replacement using the codes dictionary
-        for dna_char in dna:
-            text += codes.get(dna_char, dna_char)
-        fh.write(text)
+        # default to itself if no lookup found
+        text += [codes.get(dna_char, dna_char) for dna_char in dna]
+        fh.write(''.join(text))
         fh.write('\n')
+
 
     # output a filename message if the output is not stdout
     if filename != '<stdout>':
