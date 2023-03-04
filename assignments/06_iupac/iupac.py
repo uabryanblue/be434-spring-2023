@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Author : Homework 06 <bryanblue@arizona.edu>
-Date   : 2023-02-28
+Date   : 2023-03-05
 Purpose: Homework 06
 """
 
@@ -37,7 +37,10 @@ def main():
 
     args = get_args()
     SEQ = args.SEQ
-    fh = open(args.outfile, 'wt') if args.outfile else sys.stdout
+    if args.outfile:
+        fh = open(args.outfile, 'wt', encoding='UTF-8')
+    else:
+        fh = sys.stdout
     filename = fh.name
     # print(f'FILE: {fh.name}')
 
