@@ -84,7 +84,6 @@ def main():
         fh.write(''.join(text))
         fh.write('\n')
 
-
     # output a filename message if the output is not stdout
     if filename != '<stdout>':
         print(f'Done, see output in "{filename}"')
