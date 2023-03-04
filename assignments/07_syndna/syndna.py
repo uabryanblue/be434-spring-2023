@@ -8,14 +8,15 @@ Purpose: Creating synthetic DNA/RNA sequences
 import argparse
 import random
 
+
 # --------------------------------------------------
 def get_args():
+
     """Get command-line arguments"""
 
     parser = argparse.ArgumentParser(
         description='Create synthetic sequences',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-
 
     parser.add_argument('-o',
                         '--outfile',
@@ -30,8 +31,8 @@ def get_args():
                         help='DNA or RNA',
                         metavar='str',
                         type=str,
-                        choices=['DNA', 'RNA'],
-                        default='DNA')
+                        choices=['dna', 'rna'],
+                        default='dna')
 
     parser.add_argument('-n',
                         '--numseqs',
@@ -74,8 +75,7 @@ def get_args():
         parser.error(f'--pctgc "{args.pctgc}" must be between 0 and 1')
 
     return parser.parse_args()
-    
-    
+
 
 # --------------------------------------------------
 def main():
@@ -83,34 +83,41 @@ def main():
 
     args = get_args()
     random.seed(args.seed)
-    
+
     fh = args.outfile
-    numseqs = args.numseqs
-    
+
     # print(f'{fh.name}')
     # print(f'{args.pctgc}')
     # print(f'{numseqs}')
-    
+
     def create_pool(pctgc, max_len, seq_type):
         """ Create the pool of bases """
 
-        t_or_u = 'T' if seq_type == 'dna' else 'U' #<1>
-        num_gc = int((pctgc / 2) * max_len)        #<2>
-        num_at = int(((1 - pctgc) / 2) * max_len)  #<3>
-        pool = 'A' * num_at + 'C' * num_gc + 'G' * num_gc + t_or_u * num_at #<4>
+        t_or_u = 'T' if seq_type == 'dna' else 'U'
+        num_gc = int((pctgc / 2) * max_len)
+        num_at = int(((1 - pctgc) / 2) * max_len)
+        pool = 'A' * num_at + 'C' * num_gc + 'G' * num_gc + t_or_u * num_at
 
-        for _ in range(max_len - len(pool)):       #<5>
+        for _ in range(max_len - len(pool)):
             pool += random.choice(pool)
 
-        return ''.join(sorted(pool))               #<6>
-    
-    pool = create_pool(args.pctgc, args.maxlen, args.seqtype)  
-    
+        return ''.join(sorted(pool))
+
+    pool = create_pool(args.pctgc, args.maxlen, args.seqtype)
     # print(f'{pool}') # debug
-    
-    print(f'Done, wrote {numseqs} {args.seqtype} sequences to "{fh.name}".') 
-    #cleanup
+    for i in range(0, args.numseqs):
+        seq_len = random.randint(args.minlen, args.maxlen)
+        # print(f"myrand: {seq_len}")
+        mysequence = random.sample(pool, seq_len)
+        # print(f"mysequence: {mysequence}")
+        fh.write(f">{i+1}\n")
+        fh.write(f"{''.join(mysequence)}\n")
+    print(f'Done, wrote {args.numseqs} {args.seqtype.upper()} sequences to "{fh.name}".')
+
+    # cleanup
     fh.close()
+
+
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
