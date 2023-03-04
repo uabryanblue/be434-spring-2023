@@ -2,71 +2,115 @@
 """
 Author : Bryan Blue <bryanblue@arizona.edu>
 Date   : 2023-03-04
-Purpose: Rock the Casbah
+Purpose: Creating synthetic DNA/RNA sequences
 """
 
 import argparse
-
+import random
 
 # --------------------------------------------------
 def get_args():
     """Get command-line arguments"""
 
     parser = argparse.ArgumentParser(
-        description='Rock the Casbah',
+        description='Create synthetic sequences',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('positional',
-                        metavar='str',
-                        help='A positional argument')
-
-    parser.add_argument('-a',
-                        '--arg',
-                        help='A named string argument',
-                        metavar='str',
-                        type=str,
-                        default='')
-
-    parser.add_argument('-i',
-                        '--int',
-                        help='A named integer argument',
-                        metavar='int',
-                        type=int,
-                        default=0)
-
-    parser.add_argument('-f',
-                        '--file',
-                        help='A readable file',
-                        metavar='FILE',
-                        type=argparse.FileType('rt'),
-                        default=None)
 
     parser.add_argument('-o',
-                        '--on',
-                        help='A boolean flag',
-                        action='store_true')
+                        '--outfile',
+                        help='Output filename',
+                        metavar='str',
+                        # type=str,
+                        type=argparse.FileType('wt'),
+                        default='out.fa')
+
+    parser.add_argument('-t',
+                        '--seqtype',
+                        help='DNA or RNA',
+                        metavar='str',
+                        type=str,
+                        choices=['DNA', 'RNA'],
+                        default='DNA')
+
+    parser.add_argument('-n',
+                        '--numseqs',
+                        help='Number of sequences to create',
+                        metavar='int',
+                        type=int,
+                        default=10)
+
+    parser.add_argument('-m',
+                        '--minlen',
+                        help='Minimum length',
+                        metavar='int',
+                        type=int,
+                        default=50)
+
+    parser.add_argument('-x',
+                        '--maxlen',
+                        help='Maximum length',
+                        metavar='int',
+                        type=int,
+                        default=75)
+
+    parser.add_argument('-p',
+                        '--pctgc',
+                        help='Percent GC',
+                        metavar='float',
+                        type=float,
+                        default=0.5)
+
+    parser.add_argument('-s',
+                        '--seed',
+                        help='Random seed',
+                        metavar='int',
+                        type=int,
+                        default=None)
+
+    args = parser.parse_args()
+
+    if not 0 < args.pctgc < 1:
+        parser.error(f'--pctgc "{args.pctgc}" must be between 0 and 1')
 
     return parser.parse_args()
-
+    
+    
 
 # --------------------------------------------------
 def main():
     """Make a jazz noise here"""
 
     args = get_args()
-    str_arg = args.arg
-    int_arg = args.int
-    file_arg = args.file
-    flag_arg = args.on
-    pos_arg = args.positional
+    random.seed(args.seed)
+    
+    fh = args.outfile
+    numseqs = args.numseqs
+    
+    # print(f'{fh.name}')
+    # print(f'{args.pctgc}')
+    # print(f'{numseqs}')
+    
+    def create_pool(pctgc, max_len, seq_type):
+        """ Create the pool of bases """
 
-    print(f'str_arg = "{str_arg}"')
-    print(f'int_arg = "{int_arg}"')
-    print('file_arg = "{}"'.format(file_arg.name if file_arg else ''))
-    print(f'flag_arg = "{flag_arg}"')
-    print(f'positional = "{pos_arg}"')
+        t_or_u = 'T' if seq_type == 'dna' else 'U' #<1>
+        num_gc = int((pctgc / 2) * max_len)        #<2>
+        num_at = int(((1 - pctgc) / 2) * max_len)  #<3>
+        pool = 'A' * num_at + 'C' * num_gc + 'G' * num_gc + t_or_u * num_at #<4>
 
+        for _ in range(max_len - len(pool)):       #<5>
+            pool += random.choice(pool)
 
+        return ''.join(sorted(pool))               #<6>
+    
+    pool = create_pool(args.pctgc, args.maxlen, args.seqtype)  
+    
+    # print(f'{pool}') # debug
+    
+    print(f'Done, wrote {numseqs} {args.seqtype} sequences to "{fh.name}".') 
+    #cleanup
+    fh.close()
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
