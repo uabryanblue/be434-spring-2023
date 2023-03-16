@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Author : lazuline <lazuline@localhost>
+Author : Bryan BLue
 Date   : 2023-03-05
 Purpose: Finding Common K-mers
 """

@@ -132,3 +132,4 @@ dmypy.json
 *.swp
 .bashrc
 assignments/05_proteins/foo.txt
+assignments/07_syndna/out.fa
