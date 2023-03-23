@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Author : Bryan BLue
-Date   : 2023-03-05
+Date   : 2023-03-23
 Purpose: Finding Common K-mers
 """
 
@@ -39,7 +39,7 @@ def get_args():
     if not args.kmer > 0:
         parser.error(f'--kmer "{args.kmer}" must be > 0')
 
-    return parser.parse_args()
+    return args
 
 
 
@@ -53,3 +53,22 @@ def main():
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
+
+def find_kmers(seq, k):
+    """ Find k-mers in string """
+
+    n = len(seq) - k + 1
+    return [] if n < 1 else\
+        [seq[i:i + k] for i in range(n)]
+        
+        
+def test_find_kmers():
+    """ Test find_kmers """
+
+    assert find_kmers('', 1) == []
+    assert find_kmers('ACTG', 1) == ['A', 'C', 'T', 'G']
+    assert find_kmers('ACTG', 2) == ['AC', 'CT', 'TG']
+    assert find_kmers('ACTG', 3) == ['ACT', 'CTG']
+    assert find_kmers('ACTG', 4) == ['ACTG']
+    assert find_kmers('ACTG', 5) == []
+    
