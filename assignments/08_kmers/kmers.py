@@ -18,7 +18,11 @@ def get_args():
     )
 
     parser.add_argument(
-        "-k", "--kmer", help="K-mer size", metavar="int", type=int, default=3
+        "-k", "--kmer",
+        help="K-mer size",
+        metavar="int",
+        type=int,
+        default=3
     )
 
     parser.add_argument(
@@ -71,22 +75,24 @@ def main():
         assert find_kmers("ACTG", 4) == ["ACTG"]
         assert find_kmers("ACTG", 5) == []
 
-    def parse_kmers(df, k):
+    def parse_kmers(fd, k):
+        """ get counts of matching kmers from:
+            df - an open file descriptor to a text file
+            k - length of kmer to find
+        """
+
         words1 = {}
-        for line in df:
+        for line in fd:
             for word in line.split():
                 for kmer in find_kmers(word, k):
-                    if words1.get(kmer):
-                        words1[kmer] += 1
-                    else:
-                        words1[kmer] = 1
-                    # print(f'found: {kmer}')
                     # increment the count of this "kmer" in "words1"
+                    # if it does not exist, initialize it to 1
+                    words1[kmer] = words1.get(kmer, 0) + 1
         return words1
 
-    def match_kmers(f1_kmers, f2_kmers):
+    def print_kmers(f1_kmers, f2_kmers):
         """
-        find matching keys
+        format and print all matching kmers
         """
 
         for key in set(f1_kmers) & set(f2_kmers):
@@ -97,8 +103,8 @@ def main():
     f1_kmers = parse_kmers(fd1, args.kmer)
     # print(f'kmer1: {f1_kmers}')
     f2_kmers = parse_kmers(fd2, args.kmer)
-    # print(f'kmer1: {f2_kmers}')
-    match_kmers(f1_kmers, f2_kmers)
+    # print(f'kmer2: {f2_kmers}')
+    print_kmers(f1_kmers, f2_kmers)
 
 
 # --------------------------------------------------
