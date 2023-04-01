@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 # import csv
 # import re
-# import sys
+import sys
 
 # --------------------------------------------------
 def get_args():
@@ -67,20 +67,36 @@ def main():
     """Make a jazz noise here"""
     
     args = get_args()
-    print(f'using delimeter:{args.delimiter}')
+    # print(f'using delimeter:{args.delimiter}')
     
-    df = pd.read_csv(args.file.name, sep=args.delimiter, dtype = str) 
+    # read the input file in a data frame, make sure all fields are strings
+    df = pd.read_csv(args.file.name, sep=args.delimiter, dtype = str, engine='python') 
+    
+    if(args.col and (args.col not in df.columns)):
+        args.file.close()
+        print(f'--col "{args.col}" not a valid column!')
+        mylist = ', '.join(df.columns.tolist())
+        sys.exit(f'Choose from {mylist}')
     
     # print(df.head())
-    print(f'Looking for:{args.val}')
+    # print(f'Looking for:{args.val}')
+    print(f'looking in column:{args.col}')
     if args.col:
-        outdf = df[df[args.col] == args.val]
+        # find all rows that match the input value in a given column, case insensitive
+        outdf = df[df[args.col].str.lower() == args.val.lower()]
     else:
-        print(f'no col specified')
-        
-    outdf.to_csv(args.outfile, header=True, index=False, mode='wt')
-    print(f'Done, wrote {outdf.shape[0]} to "{args.outfile}".')
-    # print(df['adult_male'].str.contains(args.val, na=False, case=False))
+        # find all all rows that match any column for a given value, case insensitive
+        # print(f'no col specified')
+        outdf = df[df.apply(lambda row: row.str.contains(args.val, case=False).any(), axis=1)] 
+
+    # no records found, report it
+    if outdf.shape[0] == 0:
+        args.file.close()
+        sys.exit(f'No usable data in --file "{args.file.name}"')    
+    else:
+        # write out same structure with the lines that matched
+        outdf.to_csv(args.outfile, header=True, index=False, mode='wt')
+        print(f'Done, wrote {outdf.shape[0]} to "{args.outfile}".')
 
 # --------------------------------------------------
 if __name__ == '__main__':
