@@ -68,18 +68,18 @@ def main():
     
     args = get_args()
     print(f'using delimeter:{args.delimiter}')
-    # args.file.name
-    print(f'opening file:{args.file.name}')
     
     df = pd.read_csv(args.file.name, sep=args.delimiter, dtype = str) 
     
     # print(df.head())
     print(f'Looking for:{args.val}')
     if args.col:
-        print(df[df[args.col] == args.val])
+        outdf = df[df[args.col] == args.val]
     else:
         print(f'no col specified')
-    
+        
+    outdf.to_csv(args.outfile, header=True, index=False, mode='wt')
+    print(f'Done, wrote {outdf.shape[0]} to "{args.outfile}".')
     # print(df['adult_male'].str.contains(args.val, na=False, case=False))
 
 # --------------------------------------------------
