@@ -6,9 +6,11 @@ Purpose: Rock the Casbah
 """
 
 import argparse
-import csv
-import re
-import sys
+import numpy as np
+import pandas as pd
+# import csv
+# import re
+# import sys
 
 # --------------------------------------------------
 def get_args():
@@ -24,6 +26,7 @@ def get_args():
                         help='Input file',
                         metavar='FILE',
                         required=True,
+                        # type=str)
                         type=argparse.FileType('rt'))
 
     parser.add_argument('-v',
@@ -64,76 +67,20 @@ def main():
     """Make a jazz noise here"""
     
     args = get_args()
-    infh = args.file
-
-    # if args.col and (args.col not in headers):
-    #     infh.close()
-    #     sys.exit(f'--col "{args.col}" not a valid column!')
+    print(f'using delimeter:{args.delimiter}')
+    # args.file.name
+    print(f'opening file:{args.file.name}')
     
-    ofh = open(args.outfile, 'wt', encoding='UTF-8')
-    print(f'delimiter:{args.delimiter}:')
-    foundCount = 0
+    df = pd.read_csv(args.file.name, sep=args.delimiter, dtype = str) 
+    
+    # print(df.head())
+    print(f'Looking for:{args.val}')
     if args.col:
-        # only search within the specified column
-        # read the file into a dictionary for all other processing
-        # first line assumed to be a header record
-        headers = infh.readline().rstrip().split(args.delimiter)
-        print(f'headers:{headers}')
-        if args.col not in headers:
-            infh.close()
-            sys.exit(f'--col "{args.col}" not a valid column!')
-        # always place a header record in the output file
-        ofh.write(f"{','.join(headers)}\n")
-        # print(f"headers: {headers}")
-        # create a dictionary of header field name/value pairs
-        records = [dict(zip(headers, line.rstrip().split(args.delimiter))) for line in infh]
-        # print(f"records: {records}")
-             # if we could not read any data, exit
-        if not records:
-            infh.close()
-            sys.exit(f'No usable data in --file "{args.file.name}"')
-
-        foundCount = find_in_col(records, args.col, args.val, ofh)
+        print(df[df[args.col] == args.val])
     else:
-        # a column is NOT specified, search anywhere within a line
-        foundCount = find_in_line(args.val, infh, ofh)
-       
-            
-    print(f'Done, wrote {foundCount} to "{ofh.name}".')         
- 
-    infh.close()
-    ofh.close()
+        print(f'no col specified')
     
-# --------------------------------------------------
-def find_in_col(records, column, value, ofh):
-    """find the given value for a given column in a list of dictionaries"""
-    
-    count = 0
-    # call upper() once on value, not in loop
-    upper_val = value.upper()
-    # print(f"column to search is: {column}")
-    for rec in records:
-        colVal = rec.get(column)
-        # print(f"{colVal.upper()} : {upper_val}")
-        if colVal.upper() == upper_val:
-            count += 1
-            ofh.write(f'{",".join(rec.values())}\n') 
-    return count
-
-# --------------------------------------------------
-def find_in_line(value, infh, ofh):
-    """find value anywhere in the line"""
-    # -- shortcircuit -- 
-    # no column specified, find the regex match somewhere in the line
-    # first line is header record, keep it in output file
-    infh.seek(0)
-    ofh.write(f'{infh.readline()}')
-    count = 0
-    for line in infh:
-        if re.search(re.escape(value), line, re.IGNORECASE):
-            ofh.write(f'{line}')
-            count += 1
-    return count
+    # print(df['adult_male'].str.contains(args.val, na=False, case=False))
 
 # --------------------------------------------------
 if __name__ == '__main__':
