@@ -70,8 +70,9 @@ def main():
     # print(f'using delimeter:{args.delimiter}')
     
     # read the input file in a data frame, make sure all fields are strings
-    df = pd.read_csv(args.file.name, sep=args.delimiter, dtype = str, engine='python') 
-    
+    df = pd.read_csv(args.file.name, sep=args.delimiter, dtype = str, engine='python')
+     
+    # if the col argument is specified, check that it is in the file column headers     
     if(args.col and (args.col not in df.columns)):
         args.file.close()
         print(f'--col "{args.col}" not a valid column!')
@@ -80,7 +81,7 @@ def main():
     
     # print(df.head())
     # print(f'Looking for:{args.val}')
-    print(f'looking in column:{args.col}')
+    # print(f'looking in column:{args.col}')
     if args.col:
         # find all rows that match the input value in a given column, case insensitive
         outdf = df[df[args.col].str.lower() == args.val.lower()]
