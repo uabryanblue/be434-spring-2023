@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 # import csv
 # import re
+import re
 import sys
 
 # --------------------------------------------------
@@ -84,7 +85,21 @@ def main():
     # print(f'looking in column:{args.col}')
     if args.col:
         # find all rows that match the input value in a given column, case insensitive
-        outdf = df[df[args.col].str.lower() == args.val.lower()]
+        # outdf = df[df[args.col].str.lower() == args.val.lower()]
+
+        # search for a substring of args.val in the field, ignoring case
+        pattern = re.compile('.*' + args.val + '.*', re.IGNORECASE)
+        # print(pattern)
+        # create a binary mask from the given column using the regex
+        mask = df[[args.col]].apply(
+            lambda x: x.str.contains(
+            pattern,
+            regex=True
+            )
+        ).any(axis=1)
+        # print(df[mask])
+        # use the mask to create a dataframe of values
+        outdf = df[mask]
     else:
         # find all all rows that match any column for a given value, case insensitive
         # print(f'no col specified')
