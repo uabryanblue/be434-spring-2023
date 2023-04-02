@@ -126,6 +126,7 @@ def test_centroids_class_bacteria():
         tmpl = ("{} --delimiter $'\t' --outfile {} "
                 '--col class --val bacteria --file {}')
         cmd = tmpl.format(prg, out_file, centroids)
+        print(cmd)
         rv, out = getstatusoutput(cmd)
         assert rv == 0
         assert out.rstrip() == f'Done, wrote 50 to "{out_file}".'
