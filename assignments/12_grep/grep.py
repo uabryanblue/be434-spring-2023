@@ -6,6 +6,7 @@ Purpose: Rock the Casbah
 """
 
 import argparse
+import os
 import sys
 
 # --------------------------------------------------
@@ -47,6 +48,13 @@ def main():
     """Make a jazz noise here"""
 
     args = get_args()
+    # ofh = args.outfile
+
+    # try to open required input files, if it fails,
+    # output error message and exit
+    for name in args.FILE:
+        if not os.path.isfile(name):
+            sys.exit(f"error: No such file or directory: '{name}'")
 
     print("hi")
 
