@@ -78,7 +78,7 @@ def main():
             for line in fh:
                 # if found, do not care about where, dump line
                 if re.search(re_pattern, line):
-                    out = f"{name}: {line}" if NumFiles > 1 else line
+                    out = f"{name}:{line}" if NumFiles > 1 else line
                     args.outfile.write(out)
 
 
