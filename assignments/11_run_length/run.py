@@ -23,8 +23,6 @@ def get_args():
 
     args = parser.parse_args()
 
-    # if a filename is given, read it all
-    # otherwise return what was found in stdin
     if os.path.isfile(args.text):
         with open(args.text, "rt", encoding="UTF-8") as fh:
             args.text = fh.read().strip()
@@ -37,26 +35,16 @@ def main():
     """run-length encoding RLE"""
 
     args = get_args()
-    
-    #for seq in map(str.rstrip, args.text):
-        #print(rle(seq))
 
     for seq in args.text.splitlines():
         print(rle(seq))
-    
+
 # --------------------------------------------------
 def compact(rematch):
     """take the found match and compact it down to
         the first character and the length of the match"""
-
     if rematch.group() is not None:
-        # ---- this is compact code
-        # return the first character of the match follwed by its length
         outstr = rematch.group()[0] + str(len(rematch.group()))
-        # ---- this is clear code
-        # mystr = rematch.group()
-        # cnt = len(mystr)
-        # outstr = mystr[0] + str(cnt)
     return outstr
 
 
@@ -70,22 +58,12 @@ def rle(seq):
 
     base = ["A", "C", "G", "T"]
     for val in base:
-        # create the regex patter based on
-        # the base character of 2 or more in a row
-        pattern = r"[" + val + "]{2,}+"
-        # function compact returns the condensed version of
-        # any found base sequence
+        # you don't need the "+" here
+        #pattern = r"[" + val + "]{2,}+"
+        pattern = r"[" + val + "]{2,}"
         seq = re.sub(pattern, compact, seq)
     return seq
 
-
-# ******* this does not work for me?????   #######
-# This test is great! The issue was with formatting. All functions need to
-# be defined from the start of the line, and your test was imbedded in the
-# def main()
-# when I swapped my code in for the rle function it works
-# yours is still failing given that you are working on the code still
-# let me know if you need help there.
 # --------------------------------------------------
 def test_rle():
     """Test rle"""
