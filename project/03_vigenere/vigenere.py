@@ -52,23 +52,22 @@ def get_args():
 
 
 # --------------------------------------------------
-# def test_shift():
+def test_shift():
 #     """test the common cases of error"""
 
-#     assert map_char("T", 0, 'TEST') == 'M'
-#     assert map_char("H", 1, 'TEST') == 'L'
-#     assert map_char("E", 2, 'TEST') == 'W'
-#     assert map_char("Q", 3, 'TEST') == 'J'
-#     assert map_char("U", 4, 'TEST') == 'N'
-#     assert map_char("I", 5, 'TEST') == 'M'
-#     # assert map_char("S", 34, 'TEST') == 'G'  
-#     # assert map_char("G", 35, 'TEST') == 'Z'
+    assert map_char("T", 0, 'TEST') == 'M'
+    assert map_char("H", 1, 'TEST') == 'L'
+    assert map_char("E", 2, 'TEST') == 'W'
+    assert map_char("Q", 3, 'TEST') == 'J'
+    assert map_char("U", 4, 'TEST') == 'N'
+    assert map_char("I", 5, 'TEST') == 'M'
+    assert map_char("G", 35, 'TEST') == 'Z'
     
 #     # Don't worry, spiders,
-#     # FWC'A AFTZN, ZTZFMGZ,
-#     assert map_char("D", 0, 'TEST') == 'F'
-#     assert map_char("S", 13, 'TEST') == 'Z'  
-#     assert map_char(",", 20, 'TEST') == ','
+#     # FWC'A AFTZN, ZTZFMGZ, 
+    assert map_char("D", 0, 'CIPHER') == 'F'
+    assert map_char("S", 13, 'CIPHER') == 'Z'  # should be A ? 18 + 8 = 26, 
+    assert map_char(",", 11, 'CIPHER') == ','
 
 
 # --------------------------------------------------
@@ -88,23 +87,35 @@ def map_char(inchar, index, keyword):
 
     # if the character is not in A-Z just return inchar
     if inchar not in string.ascii_uppercase:
-        # print(f"FOUND NON ALPHA:{inchar}:")
+        print(f"FOUND NON ALPHA:{inchar}:{index}")
         return inchar
 
     # the ordinal position of 'A' is 65 use this in calculations
     # calculate the input character position in A-Z, 0 based
-    InValue = ord(inchar) - 65
+    # InValue = ord(inchar) - 65
+    InValue = get_alpha_number(inchar)
     # print(f"--inchar: {inchar}, Index: {index} InOrd: {InValue}")
     
     KeyLen = len(keyword)
     HashIndex = index % KeyLen
     # HashIndex = (index + 1) % KeyLen
-    # print(f"KeyLen: {KeyLen}, HashIndex: {HashIndex}")
     
-    KeyValue = ord(keyword[HashIndex]) - 65
+    KeyValue = get_alpha_number(keyword[HashIndex])
+
+    # KeyValue = ord(keyword[HashIndex]) - 65
     # print(f"keyvalue: {KeyValue} HashCar:{keyword[HashIndex]}")
 
-    FinalOrd = (InValue + KeyValue) % 26 + 65
+    # FinalOrd = (InValue + KeyValue) % 26 + 65
+    tmp = InValue + KeyValue
+    if tmp > 25: tmp = tmp - 26 # 0 based, 0 -> 25, but 26 values
+    # print(f"Inchar: {inchar}, InVal: {InValue}, KeyLen: {KeyLen}, HashIndex: {HashIndex}:{keyword[HashIndex]}, KeyValue: {KeyValue}, tmp: {tmp}")
+
+    FinalOrd = tmp + 65
+    # print(f"Inchar: {inchar}, InVal: {InValue:2}, KeyLen: {KeyLen:2}, HashIndex: {HashIndex:2}:{keyword[HashIndex]}, KeyValue: {KeyValue:2}, tmp: {tmp:2}, finalord {FinalOrd:2}:{chr(FinalOrd)}")
+    print(f"Inchar: {inchar}, AlphaVal: {InValue:2}, HashIndex:KeyChar: {HashIndex:2}:{keyword[HashIndex]}, AlphaHashVal: {KeyValue:2}, sum: {InValue + KeyValue}, SumCorrected: {tmp:2}, MappedChar {FinalOrd:2}:{chr(FinalOrd)}")
+
+    # FinalOrd = ((InValue + KeyValue) - 26) + 65
+    # print(f"InValue: {InValue}; KeyValue: {KeyValue}")
     # print(f"FinalOrd: {FinalOrd} finalchar: {chr(FinalOrd)}")
 
     return chr(FinalOrd)
@@ -116,28 +127,21 @@ def main():
 
     args = get_args()
 
-    alpha_test()
-    exit()
+    # alpha_test()
+    # exit()
 
     for line in args.infile:
-
-        line = line.upper() # ''.join(line.upper().split())
-        print(line, args.keyword)
-        # print(str.upper(line))
-        # assert map_char("D", 0, 'TEST') == 'F'
-        # assert map_char("S", 13, 'TEST') == 'Z' 
+        lmap = ''
+        # line = ''.join(line.split()) #### debug
+        line = line.upper()
         for i,c in enumerate(line):
             mapped = map_char(c.upper(), i, args.keyword)
             # print("mapped")
             # print(c, i, mapped, ord(c), ord(mapped))
+            # args.outfile.write(f"::{c.upper()}:{i}:{mapped}")
+            lmap = lmap + mapped
             args.outfile.write(mapped)
-            # print(c, i)
-        args.outfile.write('\n')
-        # print(line)
-        # for c in line:
-        # # args.outfile.write(''.join([shift_forward(c.upper(), Shift).upper()
-        #                             for c in line]))
-
+        args.outfile.write(lmap) # debug
 
 # --------------------------------------------------
 if __name__ == "__main__":
