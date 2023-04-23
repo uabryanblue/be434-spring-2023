@@ -7,9 +7,9 @@ Purpose: Substitution Cipher
 
 import argparse
 import random
-import re
 import string
 import sys
+
 
 # --------------------------------------------------
 def get_args():
@@ -29,16 +29,22 @@ def get_args():
     )
 
     parser.add_argument(
-        "-s", "--seed", help="A random seed", metavar="SEED", type=int, default=3
+        "-s", "--seed",
+        help="A random seed",
+        metavar="SEED",
+        type=int,
+        default=3
     )
 
     parser.add_argument(
-        "-d", "--decode", help="A boolean flag", action="store_true", default=False
+        "-d", "--decode",
+        help="A boolean flag",
+        action="store_true",
+        default=False
     )
 
     parser.add_argument(
-        "-o",
-        "--outfile",
+        "-o", "--outfile",
         help="Output file",
         metavar="FILE",
         type=argparse.FileType("wt"),
@@ -47,36 +53,39 @@ def get_args():
 
     return parser.parse_args()
 
+
 # --------------------------------------------------
 def build_dictionary():
-    """create a mapping from A-Z to a random list of A-Z vlaues"""
+    """create a dictionary mapping A-Z to a random list of A-Z vlaues"""
 
-    substitution={}
-    alpha=[]
-    
+    substitution = {}
+    alpha = []
+
     alpha = list(string.ascii_uppercase)
-    substitution = dict(zip(list(alpha),random.sample(alpha, 26)))
-    # print(substitution)
+    substitution = dict(zip(list(alpha), random.sample(alpha, 26)))
+
     return substitution
-    
-    
+
+
 # --------------------------------------------------
 def sub_cypher(inchar, SubDict, decode):
-    """convert in character to substituted value"""
+    """convert character to substituted value
+    if decode is True return the decoded value"""
 
-    # if the character is not in A-Z, a-z, just return inchar
-    pattern = re.compile("[A-Za-z]")
-    if pattern.search(inchar) is None:
+    # if the character is not in A-Z just return inchar
+    if inchar not in string.ascii_uppercase:
         return inchar
-    
+
     if decode:
-        newchar = ''.join([key for key, value in SubDict.items() if value == inchar])
+        newchar = "".join([key for key, value in SubDict.items()
+                           if value == inchar])
     else:
-        newchar = inchar if SubDict.get(inchar) is None else SubDict.get(inchar)
-        # if newchar is None:
-        #     newchar = inchar
+        mychar = SubDict.get(inchar)
+        newchar = inchar if mychar is None else mychar
+
     return newchar
-    
+
+
 # --------------------------------------------------
 def main():
     """Substitution Cipher"""
@@ -86,14 +95,12 @@ def main():
     random.seed(args.seed)
     substitution = build_dictionary()
 
+    # encode or decode every character for every line in input file
     for line in args.infile:
-        # if args.decode:
-        #     # print("decode!")
-        args.outfile.write(''.join([sub_cypher(c.upper(), substitution, args.decode) for c in line]))
-            # print([key for key, value in substitution.items() if value == c.upper()])
-        # else:
-        #     # _ = [args.outfile.write(sub_cypher(c.upper(), substitution)) for c in line]
-        #     args.outfile.write(''.join([sub_cypher(c.upper(), substitution, args.decode) for c in line]))
+        args.outfile.write(
+            "".join([sub_cypher(c.upper(), substitution, args.decode)
+                    for c in line])
+        )
 
 
 # --------------------------------------------------
