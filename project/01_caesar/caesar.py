@@ -94,8 +94,9 @@ def main():
 
     args = get_args()
 
-    # if decoding, just use negative of the shift value
-    Shift = (-1 * args.number) if args.decode else args.number
+    # if the user sends in a negative number, use abs() to force to positive
+    # if decoding True, use negative of the shift value
+    Shift = (-1 * abs(args.number)) if args.decode else abs(args.number)
     # this will work for upper and lower case letters
     # the .upper() is added to pass the tests
     for line in args.infile:
