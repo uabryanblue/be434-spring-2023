@@ -7,8 +7,8 @@ test using: pytest -xv caesar.py
 """
 
 import argparse
+import string
 import sys
-import re
 
 
 # --------------------------------------------------
@@ -72,9 +72,8 @@ def shift_forward(inchar, steps):
     """use a numerical approach using the modulus
     operator to shift using ordinal (ascii) values"""
 
-    # if the character is not in A-Z, a-z, just return inchar
-    pattern = re.compile("[A-Za-z]")
-    if pattern.search(inchar) is None:
+    # if the character is not in A-Z just return inchar
+    if inchar not in string.ascii_uppercase:
         return inchar
 
     # start at position of upper or lower ordinal based on input
@@ -100,7 +99,8 @@ def main():
     # this will work for upper and lower case letters
     # the .upper() is added to pass the tests
     for line in args.infile:
-        _ = [args.outfile.write(shift_forward(c, Shift).upper()) for c in line]
+        args.outfile.write(''.join([shift_forward(c.upper(), Shift).upper()
+                                    for c in line]))
 
 
 # --------------------------------------------------
