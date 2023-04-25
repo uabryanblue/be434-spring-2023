@@ -6,6 +6,7 @@ Purpose: Vigenere Ciphers
 """
 
 import argparse
+import re
 import string
 import sys
 
@@ -81,14 +82,14 @@ def alpha_test():
         print(f"i:{i}; chr:{c}; alphabet pos; {alphpos}")
     return
 # --------------------------------------------------
-def map_char(inchar, index, keyword):
+def map_char(inchar, index, keyword, CipherChar):
     """translate inchar with its index and keyword index
         using base 26"""
 
     # if the character is not in A-Z just return inchar
     if inchar not in string.ascii_uppercase:
-        print(f"FOUND NON ALPHA:{inchar}:{index}")
-        return inchar
+        # print(f"FOUND NON ALPHA:{inchar}:{index}")
+        return inchar, 0
 
     # the ordinal position of 'A' is 65 use this in calculations
     # calculate the input character position in A-Z, 0 based
@@ -96,29 +97,31 @@ def map_char(inchar, index, keyword):
     InValue = get_alpha_number(inchar)
     # print(f"--inchar: {inchar}, Index: {index} InOrd: {InValue}")
     
-    KeyLen = len(keyword)
-    HashIndex = index % KeyLen
+    # KeyLen = len(keyword)
+    # HashIndex = index % KeyLen
     # HashIndex = (index + 1) % KeyLen
     
-    KeyValue = get_alpha_number(keyword[HashIndex])
-
+    # KeyValue = get_alpha_number(keyword[HashIndex])
+    KeyValue = get_alpha_number(CipherChar)
     # KeyValue = ord(keyword[HashIndex]) - 65
     # print(f"keyvalue: {KeyValue} HashCar:{keyword[HashIndex]}")
 
     # FinalOrd = (InValue + KeyValue) % 26 + 65
-    tmp = InValue + KeyValue
-    if tmp > 25: tmp = tmp - 26 # 0 based, 0 -> 25, but 26 values
+    FinalOrd = ((InValue + KeyValue) % 26) + 65
+    # tmp = InValue + KeyValue
+    # if tmp > 25: tmp = tmp - 26 # 0 based, 0 -> 25, but 26 values
     # print(f"Inchar: {inchar}, InVal: {InValue}, KeyLen: {KeyLen}, HashIndex: {HashIndex}:{keyword[HashIndex]}, KeyValue: {KeyValue}, tmp: {tmp}")
 
-    FinalOrd = tmp + 65
+    # FinalOrd = tmp + 65
     # print(f"Inchar: {inchar}, InVal: {InValue:2}, KeyLen: {KeyLen:2}, HashIndex: {HashIndex:2}:{keyword[HashIndex]}, KeyValue: {KeyValue:2}, tmp: {tmp:2}, finalord {FinalOrd:2}:{chr(FinalOrd)}")
-    print(f"Inchar: {inchar}, AlphaVal: {InValue:2}, HashIndex:KeyChar: {HashIndex:2}:{keyword[HashIndex]}, AlphaHashVal: {KeyValue:2}, sum: {InValue + KeyValue}, SumCorrected: {tmp:2}, MappedChar {FinalOrd:2}:{chr(FinalOrd)}")
+    # print(f"Inchar: {inchar}, AlphaVal: {InValue:2}, HashIndex:KeyChar: {HashIndex:2}:{keyword[HashIndex]}, AlphaHashVal: {KeyValue:2}, sum: {InValue + KeyValue}, SumCorrected: {tmp:2}, MappedChar {FinalOrd:2}:{chr(FinalOrd)}")
+    # print(f"Inchar: {inchar}, AlphaVal: {InValue:2}, KeyChar: {CipherChar:2}, AlphaHashVal: {KeyValue:2}, sum: {InValue + KeyValue}, MappedChar {FinalOrd:2}:{chr(FinalOrd)}")
 
     # FinalOrd = ((InValue + KeyValue) - 26) + 65
     # print(f"InValue: {InValue}; KeyValue: {KeyValue}")
     # print(f"FinalOrd: {FinalOrd} finalchar: {chr(FinalOrd)}")
 
-    return chr(FinalOrd)
+    return chr(FinalOrd), 1
 
 
 # --------------------------------------------------
@@ -134,13 +137,19 @@ def main():
         lmap = ''
         # line = ''.join(line.split()) #### debug
         line = line.upper()
-        for i,c in enumerate(line):
-            mapped = map_char(c.upper(), i, args.keyword)
-            # print("mapped")
-            # print(c, i, mapped, ord(c), ord(mapped))
-            # args.outfile.write(f"::{c.upper()}:{i}:{mapped}")
-            lmap = lmap + mapped
-            args.outfile.write(mapped)
+        CPos = 0
+        for word in re.split(r'(\W+)', line):
+            for i,c in enumerate(word):
+                CipherChar = args.keyword[CPos % len(args.keyword)]
+                # print(f"i {i}, c {c}, CipherChar {CipherChar}, CPos {CPos}")
+                # CPos =+ 1
+                mapped, Inc = map_char(c.upper(), i, args.keyword, CipherChar)
+                CPos += Inc
+                # print("mapped")
+                # print(c, i, mapped, ord(c), ord(mapped))
+                # args.outfile.write(f"::{c.upper()}:{i}:{mapped}")
+                lmap = lmap + mapped
+                # args.outfile.write(mapped)
         args.outfile.write(lmap) # debug
 
 # --------------------------------------------------
