@@ -77,56 +77,52 @@ def get_args():
 
 
 # --------------------------------------------------
-def get_alpha_number(inchar):
-    out = ord(inchar) - 65
-    return out
-
-
-# --------------------------------------------------
 def map_char(inchar, CipherChar, Decode):
-    """translate inchar with its index and keyword index
+    """translate inchar with its cipher character
     using base 26"""
 
     # if the character is not in A-Z just return inchar
+    # return a 0 => do not increment to next cipher character
     if inchar not in string.ascii_uppercase:
-        # return a 0 => do not increment to next cipher character
         return inchar, 0
 
     # calculate the input character position in A-Z, 0 based
-    InValue = get_alpha_number(inchar)
-    KeyValue = get_alpha_number(CipherChar)
+    InValue = ord(inchar) - 65
+    CipherValue = ord(CipherChar) - 65
 
-    # the ordinal position of 'A' is 65 use this in calculations
+    # the ordinal position of 'A' is 65 and used for clarity
     if Decode:
-        FinalOrd = ((InValue - KeyValue) % 26) + 65
+        FinalChar = chr(((InValue - CipherValue) % 26) + 65)
     else:
-        FinalOrd = ((InValue + KeyValue) % 26) + 65
+        FinalChar = chr(((InValue + CipherValue) % 26) + 65)
+
     # return a 1 => increment to next cipher character
-    return chr(FinalOrd), 1
+    return FinalChar, 1
 
 
 # --------------------------------------------------
 def main():
-    """Vigenere Ciphers"""
+    """Vigenere Ciphers
+    Traverse every line, word, and character of a file
+    Ignore any non A-Z when encode/decode using cipher"""
 
     args = get_args()
 
     # read a line from the file
     for line in args.infile:
-        lmap = ""
-        line = line.upper()
+        line = line.upper()  # not all input is in uppercase
+        LineCipher = ""
         CPos = 0
-        # then split into words that also include non-alpha chars
+        # split into words that also include non-alpha chars
         for word in re.split(r"(\W+)", line):
-            # then enumerate throug the word
-            for i, c in enumerate(word):
-                # pick the correct keyword character, ignoring non-alpha
+            # enumerate throug the word
+            for c in word:
+                # pick the correct keyword character
                 CipherChar = args.keyword[CPos % len(args.keyword)]
-                # print(CipherChar)
                 mapped, Inc = map_char(c.upper(), CipherChar, args.decode)
                 CPos += Inc
-                lmap = lmap + mapped
-        args.outfile.write(lmap)
+                LineCipher = LineCipher + mapped
+        args.outfile.write(LineCipher)
 
 
 # --------------------------------------------------
